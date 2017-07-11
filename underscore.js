@@ -56,6 +56,7 @@
 
   // 函数的性能优化
   var optimizeCb = function(func, context, argCount) {
+    console.log(context);
     if (context === void 0) return func; // undefined使用void 0 判断  void 0为运算符，返回值为undefinded
     switch (argCount) {
       case 1: return function(value) {
@@ -130,7 +131,7 @@
     Ctor.prototype = null;
     return result;
   };
-  // 
+  // 显示属性（浅层次）
   var shallowProperty = function(key) {
     return function(obj) {
       return obj == null ? void 0 : obj[key];
@@ -150,23 +151,19 @@
   // should be iterated as an array or as an object.
   // Related: http://people.mozilla.org/~jorendorff/es6-draft.html#sec-tolength
   // Avoids a very nasty iOS 8 JIT bug on ARM-64. #2094
-  var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1;
-  var getLength = shallowProperty('length');
-  var isArrayLike = function(collection) {
+  var MAX_ARRAY_INDEX = Math.pow(2, 53) - 1; // JS最大数-1
+  var getLength = shallowProperty('length'); // 获取length属性
+  var isArrayLike = function(collection) { // 判断是否是类数组
     var length = getLength(collection);
     return typeof length == 'number' && length >= 0 && length <= MAX_ARRAY_INDEX;
   };
 
-  // Collection Functions
-  // --------------------
-
-  // The cornerstone, an `each` implementation, aka `forEach`.
-  // Handles raw objects in addition to array-likes. Treats all
-  // sparse array-likes as if they were dense.
+  // each循环 类似于ES5 forEach
   _.each = _.forEach = function(obj, iteratee, context) {
-    iteratee = optimizeCb(iteratee, context);
+    iteratee = optimizeCb(iteratee, context);  // 优化回调
+
     var i, length;
-    if (isArrayLike(obj)) {
+    if (isArrayLike(obj)) { // 类数组处理
       for (i = 0, length = obj.length; i < length; i++) {
         iteratee(obj[i], i, obj);
       }
@@ -181,7 +178,7 @@
 
   // Return the results of applying the iteratee to each element.
   _.map = _.collect = function(obj, iteratee, context) {
-    iteratee = cb(iteratee, context);
+    iteratee = cb(iteratee, context); //对调
     var keys = !isArrayLike(obj) && _.keys(obj),
         length = (keys || obj).length,
         results = Array(length);
