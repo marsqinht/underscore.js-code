@@ -7,6 +7,7 @@
 
   // 判断执行环境
   // self 属性可返回对窗口自身的只读引用。
+  //  self 还能用于一些不具有窗口的上下文环境中，比如 Web Workers。所以，为了服务于更多场景，underscore 选择了更加通用的 self 对象。
   var root = typeof self == 'object' && self.self === self && self ||
             typeof global == 'object' && global.global === global && global ||
             this ||
@@ -33,35 +34,29 @@
   // Naked function reference for surrogate-prototype-swapping.
   var Ctor = function(){};
 
-  // Create a safe reference to the Underscore object for use below.
+  // 下划线函数对象
   var _ = function(obj) {
     if (obj instanceof _) return obj;
     if (!(this instanceof _)) return new _(obj);
-    this._wrapped = obj;
+    console.log('wraped');
   };
 
-  // Export the Underscore object for **Node.js**, with
-  // backwards-compatibility for their old module API. If we're in
-  // the browser, add `_` as a global object.
-  // (`nodeType` is checked to ensure that `module`
-  // and `exports` are not HTML elements.)
-  if (typeof exports != 'undefined' && !exports.nodeType) {
+  // 判断环境
+  if (typeof exports != 'undefined' && !exports.nodeType) {//node.js环境  判断兼容旧export API
     if (typeof module != 'undefined' && !module.nodeType && module.exports) {
       exports = module.exports = _;
     }
     exports._ = _;
-  } else {
+  } else {//浏览器环境挂在在全局
     root._ = _;
   }
 
-  // Current version.
+  // 版本信息
   _.VERSION = '1.8.3';
 
-  // Internal function that returns an efficient (for current engines) version
-  // of the passed-in callback, to be repeatedly applied in other Underscore
-  // functions.
+  // 函数的性能优化
   var optimizeCb = function(func, context, argCount) {
-    if (context === void 0) return func;
+    if (context === void 0) return func; // undefined使用void 0 判断  void 0为运算符，返回值为undefinded
     switch (argCount) {
       case 1: return function(value) {
         return func.call(context, value);
@@ -135,7 +130,7 @@
     Ctor.prototype = null;
     return result;
   };
-
+  // 
   var shallowProperty = function(key) {
     return function(obj) {
       return obj == null ? void 0 : obj[key];
