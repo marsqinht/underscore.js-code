@@ -38,7 +38,6 @@
   var _ = function(obj) {
     if (obj instanceof _) return obj;
     if (!(this instanceof _)) return new _(obj);
-    console.log('wraped');
   };
 
   // 判断环境
@@ -56,7 +55,6 @@
 
   // 函数的性能优化
   var optimizeCb = function(func, context, argCount) {
-    console.log(context);
     if (context === void 0) return func; // undefined使用void 0 判断  void 0为运算符，返回值为undefinded
     switch (argCount) {
       case 1: return function(value) {
@@ -79,13 +77,10 @@
 
   var builtinIteratee;
 
-  // An internal function to generate callbacks that can be applied to each
-  // element in a collection, returning the desired result — either `identity`,
-  // an arbitrary callback, a property matcher, or a property accessor.
   var cb = function(value, context, argCount) {
     if (_.iteratee !== builtinIteratee) return _.iteratee(value, context);
-    if (value == null) return _.identity;
-    if (_.isFunction(value)) return optimizeCb(value, context, argCount);
+    if (value == null) return _.identity; // 不存在返回本身
+    if (_.isFunction(value)) return optimizeCb(value, context, argCount); // 函数 回调优化
     if (_.isObject(value) && !_.isArray(value)) return _.matcher(value);
     return _.property(value);
   };
@@ -179,7 +174,7 @@
   // Return the results of applying the iteratee to each element.
   _.map = _.collect = function(obj, iteratee, context) {
     iteratee = cb(iteratee, context); //对调
-    var keys = !isArrayLike(obj) && _.keys(obj),
+    var keys = !isArrayLike(obj) && _.keys(obj), 
         length = (keys || obj).length,
         results = Array(length);
     for (var index = 0; index < length; index++) {
@@ -189,12 +184,10 @@
     return results;
   };
 
-  // Create a reducing function iterating left or right.
+  // reduce函数
   var createReduce = function(dir) {
-    // Wrap code that reassigns argument variables in a separate function than
-    // the one that accesses `arguments.length` to avoid a perf hit. (#1991)
     var reducer = function(obj, iteratee, memo, initial) {
-      var keys = !isArrayLike(obj) && _.keys(obj),
+      var keys = !isArrayLike(obj) && _.keys(obj), // 判断数组还是 obj
           length = (keys || obj).length,
           index = dir > 0 ? 0 : length - 1;
       if (!initial) {
@@ -214,8 +207,7 @@
     };
   };
 
-  // **Reduce** builds up a single result from a list of values, aka `inject`,
-  // or `foldl`.
+  // reduce/foldl/inject 等价
   _.reduce = _.foldl = _.inject = createReduce(1);
 
   // The right-associative version of reduce, also known as `foldr`.
@@ -972,8 +964,7 @@
     }
   };
 
-  // Retrieve the names of an object's own properties.
-  // Delegates to **ECMAScript 5**'s native `Object.keys`.
+  // 类似于ES5 Object.keys的原生实现
   _.keys = function(obj) {
     if (!_.isObject(obj)) return [];
     if (nativeKeys) return nativeKeys(obj);
