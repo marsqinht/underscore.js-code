@@ -4,6 +4,7 @@ var obj = {
   c: 'rew',
   f: 'fds'
 }
+var str = 'mars'
 
 var a = _.map(arr,function(val,index){
  //  console.log(val,index);
@@ -13,4 +14,6 @@ var a = _.map(arr,function(val,index){
 var c = _.reduce(arr,function(a,b){
   return a+b
 })
-console.log(c);
+
+console.log(_.find(arr))
+

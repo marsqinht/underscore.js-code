@@ -171,7 +171,7 @@
     return obj;
   };
 
-  // Return the results of applying the iteratee to each element.
+  // map数组
   _.map = _.collect = function(obj, iteratee, context) {
     iteratee = cb(iteratee, context); //对调
     var keys = !isArrayLike(obj) && _.keys(obj), 
@@ -189,7 +189,7 @@
     var reducer = function(obj, iteratee, memo, initial) {
       var keys = !isArrayLike(obj) && _.keys(obj), // 判断数组还是 obj
           length = (keys || obj).length,
-          index = dir > 0 ? 0 : length - 1;
+          index = dir > 0 ? 0 : length - 1; //判断顺序
       if (!initial) {
         memo = obj[keys ? keys[index] : index];
         index += dir;
@@ -210,10 +210,10 @@
   // reduce/foldl/inject 等价
   _.reduce = _.foldl = _.inject = createReduce(1);
 
-  // The right-associative version of reduce, also known as `foldr`.
+  // 计算顺序
   _.reduceRight = _.foldr = createReduce(-1);
 
-  // Return the first value which passes a truth test. Aliased as `detect`.
+  // 返回obj/array/string 第一个值
   _.find = _.detect = function(obj, predicate, context) {
     var keyFinder = isArrayLike(obj) ? _.findIndex : _.findKey;
     var key = keyFinder(obj, predicate, context);
@@ -641,7 +641,7 @@
     };
   };
 
-  // Returns the first index on an array-like that passes a predicate test.
+  // 数组/类数组  查找索引   根据1/-1 判断
   _.findIndex = createPredicateIndexFinder(1);
   _.findLastIndex = createPredicateIndexFinder(-1);
 
