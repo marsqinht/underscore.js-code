@@ -15,5 +15,8 @@ var c = _.reduce(arr,function(a,b){
   return a+b
 })
 
-console.log(_.find(arr))
+// console.log(_.find(arr))
 
+_.each(arr,function(el,index){
+  console.log(el,index);
+})
