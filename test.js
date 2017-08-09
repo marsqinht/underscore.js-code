@@ -50,7 +50,7 @@ console.log(objList)
     let length = (keys || list).length
     let results = Array(length)
 
-    console.log(keys, isArrayLike(list), length)
+    // console.log(keys, isArrayLike(list), length)
 
     for (let i = 0; i < length; i++) {
       let result = keys ? interatee(list[keys[i]], keys[i], list) : interatee(list[i], i, list)
