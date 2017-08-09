@@ -1,20 +1,24 @@
+const div = document.getElementsByTagName('div')
 const arr = [1,2,4,5,6,7,8]
 const objList = {
   a: 2,
   b: 'fds',
   c: 54455
 }
+
 ;(function(){
-  var isArray = function(target){
-    return Object.prototype.toString.call(target) === '[object Array]'
+  const isArrayLike = (target) => {
+    let length = target.length
+    return Object.prototype.toString.call(target) === '[object Array]' || typeof length === 'number' && length >= 0
   }
-  var isObject = function(target) {
+  const isObject = function(target) {
     return Object.prototype.toString.call(target) === '[object Object]'
   }
 
-  var each = function (list, interatee, context) {
-    if (isArray(list)) {
-      for (var i = 0; i < list.length; i++) {
+
+  const each = (list, interatee, context) => {
+    if (isArrayLike(list)) {
+      for (var i = 0, len = list.length; i < len; i++) {
        interatee(list[i], i, list)  
       }
     }
@@ -30,7 +34,7 @@ const objList = {
     return list
   }
 
-  each(objList,function(el,index){
+  each(arr,function(el,index){
     console.log(el, index);
   })
 
