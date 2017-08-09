@@ -1,22 +1,38 @@
-var arr = [1,'fd',3,4];
-var obj = {
-  q: 42343,
-  c: 'rew',
-  f: 'fds'
+const arr = [1,2,4,5,6,7,8]
+const objList = {
+  a: 2,
+  b: 'fds',
+  c: 54455
 }
-var str = 'mars'
+;(function(){
+  var isArray = function(target){
+    return Object.prototype.toString.call(target) === '[object Array]'
+  }
+  var isObject = function(target) {
+    return Object.prototype.toString.call(target) === '[object Object]'
+  }
 
-var a = _.map(arr,function(val,index){
- //  console.log(val,index);
-  return val+2
-})
+  var each = function (list, interatee, context) {
+    if (isArray(list)) {
+      for (var i = 0; i < list.length; i++) {
+       interatee(list[i], i, list)  
+      }
+    }
 
-var c = _.reduce(arr,function(a,b){
-  return a+b
-})
+    if (isObject(list)) {
+      for (var key in list) {
+        if (list.hasOwnProperty(key)) {
+           interatee(key, list[key], list)          
+        }
+      }
+    }
 
-// console.log(_.find(arr))
+    return list
+  }
 
-_.each(arr,function(el,index){
-  console.log(el,index);
-})
+  each(objList,function(el,index){
+    console.log(el, index);
+  })
+
+
+}())
