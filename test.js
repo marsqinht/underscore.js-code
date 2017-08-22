@@ -16,6 +16,8 @@ console.log(objList)
 
   window.__ = __
 
+  __.Author = 'M@rs'
+
   const nativeToString = Object.prototype.toString
 
   const isArrayLike = (target) => {
@@ -43,6 +45,14 @@ console.log(objList)
       }
     }
     return list
+  }
+  __.find = (list, predicate) => {
+    if (isArrayLike(list)) {
+      for (let i = 0, len = list.length; i < len; i++) {
+        let isTarget = predicate(list[i])
+        if (isTarget) return list[i]
+      }
+    }
   }
 
   __.map = (list, interatee, context) => {
@@ -77,15 +87,15 @@ console.log(objList)
     }
     return arr
   }
+  console.log(__.find([1, 2, 3, 4, 5, 6], function (num) { return num % 3 === 0 }))
+  // console.log(__.map(arr, function (el, index) {
+  //   return el + 3
+  // }))
 
-  console.log(__.map(arr, function (el, index) {
-    return el + 3
-  }))
-
-  console.log(__.reduce(arr, function (memo, num, d, c) {
-    console.log(memo, num)
-    return memo + num
-  }, 3))
+  // console.log(__.reduce(arr, function (memo, num, d, c) {
+  //   console.log(memo, num)
+  //   return memo + num
+  // }, 3))
 }())
 
 // var sum = _.reduce([1, 2, 4, 5, 6, 7, 8], function (memo, num, d, c) {
